@@ -5,6 +5,7 @@ using namespace std;
 
 void printBoard(char board[3][3]);
 pair<int, int> getUserInput(char board[3][3]);
+char checkWinner(char board[3][3]);
 
 int main()
 {
@@ -16,6 +17,7 @@ int main()
     const char playerX = 'X';
     const char playerO = 'O';
     char currentPlayer = playerX;
+    char winner = ' ';
     int r = -1;
     int c = -1;
 
@@ -28,8 +30,15 @@ int main()
         c = userInput.second;
         board[r][c] = currentPlayer;
         currentPlayer = (currentPlayer == playerX) ? playerO : playerX;
+        winner = checkWinner(board);
+        if (winner != ' ')
+            break;
     }
-
+    printBoard(board);
+    if (winner != ' ')
+        cout << "Player " << winner << " won the game!" << endl;
+    else
+        cout << "The game is a draw!" << endl;
     return 0;
 }
 
@@ -71,4 +80,34 @@ pair<int, int> getUserInput(char board[3][3])
         cin.ignore(10000, '\n');
     }
     return {r, c};
+}
+
+char checkWinner(char board[3][3])
+{
+    char winner = ' ';
+
+    for (int r = 0; r < 3; r++)
+    {
+        if (board[r][0] != ' ' && board[r][0] == board[r][1] && board[r][0] == board[r][2])
+        {
+            winner = board[r][0];
+            break;
+        }
+    }
+
+    for (int c = 0; c < 3; c++)
+    {
+        if (board[c][0] != ' ' && board[c][0] == board[c][1] && board[c][0] == board[c][2])
+        {
+            winner = board[c][0];
+            break;
+        }
+    }
+
+    if (board[0][0] != ' ' && board[0][0] == board[1][1] && board[0][0] == board[2][2])
+        winner = board[0][0];
+    if (board[0][2] != ' ' && board[0][2] == board[1][1] && board[0][0] == board[2][0])
+        winner = board[0][2];
+
+    return winner;
 }
